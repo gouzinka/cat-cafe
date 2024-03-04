@@ -1,0 +1,35 @@
+{
+  "name": "dnanexus-catcafe",
+  "version": "1.0.0",
+  "description": "A programming exercise for the front-end team at DNAnexus.",
+  "keywords": [],
+  "main": "src/index.tsx",
+  "dependencies": {
+    "isomorphic-fetch": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-scripts": "latest"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "format": "prettier --write ."
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

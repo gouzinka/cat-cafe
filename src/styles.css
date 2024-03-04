@@ -1,0 +1,80 @@
+.App {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  margin: 0px;
+}
+
+header {
+  background-color: rgb(227, 229, 212);
+  text-align: center;
+}
+
+header h1 {
+  font-weight: 400;
+  margin: 3px;
+}
+
+img#head-cat {
+  width: 225px;
+}
+
+#cash-calculator {
+  width: 400px;
+}
+
+#tagline {
+  width: 300px;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+#tagline,
+#cash-calculator {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cash-line {
+  margin: 8px 0px;
+}
+
+.cash-line label {
+  text-align: right;
+  float: left;
+}
+
+.cash-line .currency-name {
+  float: right;
+}
+
+.cash-line input {
+  border-radius: 5px;
+  border: 1px solid rgb(212, 212, 212);
+  padding: 6px 5px;
+}
+
+button#calculate {
+  color: white;
+  background-color: rgb(0, 129, 176);
+  border-radius: 5px;
+  border: none;
+  font-size: 13px;
+  height: 28px;
+}
+
+button#calculate:hover {
+  cursor: pointer;
+  background-color: rgb(0, 109, 156);
+}
+
+.cash-line input,
+button#calculate {
+  width: 160px;
+}
+
+/*
+    ---
+    Add your custom CSS below this line
+    ---
+  */
