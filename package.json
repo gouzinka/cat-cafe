@@ -11,6 +11,7 @@
     "react-scripts": "latest"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
     "prettier": "^3.2.5"
   },
   "scripts": {

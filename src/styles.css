@@ -78,3 +78,7 @@ button#calculate {
     Add your custom CSS below this line
     ---
   */
+
+.error-message {
+  color: rgb(177, 37, 37);
+}
