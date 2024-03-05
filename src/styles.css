@@ -29,7 +29,8 @@ img#head-cat {
 }
 
 #tagline,
-#cash-calculator {
+#cash-calculator,
+#results {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -79,6 +80,86 @@ button#calculate {
     ---
   */
 
-.error-message {
+/*
+    Error message
+*/
+.spi .error-message {
   color: rgb(177, 37, 37);
+}
+
+/*
+    Spinner
+*/
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #09f;
+  animation: spin 1s ease infinite;
+  margin: 6px auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/*
+    Box
+*/
+
+.box {
+  display: inline-block;
+  min-width: 500px;
+  max-width: 100%;
+  margin: 40px auto;
+  background-color: rgb(229 240 248);
+  border-radius: 4px;
+  box-shadow: 0 0 6px 1px #c3c3c3;
+  padding: 32px 16px;
+}
+
+.box__heading {
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.3;
+  margin-bottom: 26px;
+}
+
+.box__content {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  padding: 0;
+  min-height: 50px;
+  text-align: center;
+}
+
+.box__citation {
+  font-size: 21px;
+  line-height: 1.2;
+  color: #5a5a5a;
+}
+
+.box__item {
+  background-color: #fff;
+  padding: 13px;
+}
+
+.box__count {
+  font-weight: 400;
+  font-size: 32px;
+}
+
+.box__denomination,
+.box__subheading {
+  font-weight: 400;
+  color: #9b9b9b;
+  font-size: 16px;
 }
