@@ -14,8 +14,10 @@ it("should initially set isLoading to true and then to false after fetching", as
   const {result} = renderHook(() => useCatFacts(0));
   expect(result.current.isLoading).toBe(true);
 
-  await waitFor(() => expect(result.current.isLoading).toBe(false));
-  expect(result.current.fact).toBe("Cats are great!");
+  await waitFor(() => {
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.fact).toBe("Cats are great!");
+  });
 });
 
 it("should use fallback fact when fetch fails", async () => {
@@ -23,8 +25,11 @@ it("should use fallback fact when fetch fails", async () => {
 
   fetchMock.mockReject(new Error("API is down"));
   const {result} = renderHook(() => useCatFacts(1));
-  await waitFor(() => expect(result.current.isLoading).toBe(false));
-  expect(result.current.fact).toBe("A group of cats is called a clowder.");
+
+  await waitFor(() => {
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.fact).toBe("A group of cats is called a clowder.");
+  });
 
   consoleSpy.mockRestore();
 });
