@@ -1,4 +1,5 @@
 import {useState, useEffect} from "react";
+import fetchWithTimeout from "../utils/fetchWithTimeout";
 
 const API_URL =
   "https://mtpgyho8j0.execute-api.us-east-1.amazonaws.com/default/catFacts";
@@ -14,6 +15,12 @@ interface UseCatFactsResult {
   isLoading: boolean;
 }
 
+/*
+    Fetch fun cat fact!
+
+    Since the API response is not exactly critical :) I used a fallback fact (ideally multiple)
+    Also any error thrown doesn't affect application run, fails silently (I would send a log to a Sentry for example)
+*/
 const useCatFacts = (submitCount: number): UseCatFactsResult => {
   const [fact, setFact] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,7 +30,7 @@ const useCatFacts = (submitCount: number): UseCatFactsResult => {
       setIsLoading(true);
 
       try {
-        const response = await fetch(API_URL);
+        const response = await fetchWithTimeout(API_URL);
 
         if (!response.ok) {
           setFact(CAT_FACT_FALLBACK);

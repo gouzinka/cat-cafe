@@ -1,5 +1,5 @@
 /*
-    Validate individual fields
+    Validate individual input fields
 
     Param @maxAllowedAmount: Sets the upper limit for input
     This parameter would be set based on specification

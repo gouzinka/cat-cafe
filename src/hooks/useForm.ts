@@ -2,6 +2,13 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { debounce } from 'lodash';
 import { validateField } from '../mewlaConverter/validateFieldUtils';
 
+/*
+    Handle validations and input change within our form
+
+    Utilize real-time validation onChange
+    This is a small form and onBlur wouldn't really have much effect
+    Also add a form-wide validation cross-field, to prevent false positive field validation
+*/
 const useForm = (initialState, initialErrors, debounceMs = 200) => {
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState(initialErrors);

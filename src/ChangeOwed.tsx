@@ -8,6 +8,8 @@ interface ChangeOwedProps {
 
 const ChangeOwed = ({change, submitCount}: ChangeOwedProps) => {
   const isChangeDue = Object.values(change).some((count) => count > 0);
+  // We want to display only used denominations
+  // Display from the biggest - since we use denominations as a number for a key, ES added automatic sorting in ascending order
   const sorteddArray = [...Object.entries(change)]
     .filter(([_, count]) => count > 0)
     .reverse();

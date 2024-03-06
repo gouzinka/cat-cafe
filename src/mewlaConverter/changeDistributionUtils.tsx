@@ -2,7 +2,7 @@
     Calculate change distribution
 
     Returns each denomination (key) and its count (val)
-    { 100: 1, 33: 1, 21: 1, 7: 1, 3: 1, 1: 1 }
+    {1: 1, 3: 1, 7: 1, 21: 1, 33: 1, 100: 1}
 */
 export const calculateChangeDistribution = (
   amountCharged: number,
@@ -14,6 +14,8 @@ export const calculateChangeDistribution = (
   }
 
   let changeDue = amountTendered - amountCharged;
+  // It's important to keep order from highest to smallest to minimize notes to make up change
+  // Denominations don't change very often, but if needed, we could add sort, which would be a small computational step
   const denominations = [100, 33, 21, 7, 3, 1];
 
   return denominations.reduce(
