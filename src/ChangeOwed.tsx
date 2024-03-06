@@ -3,22 +3,16 @@ import useCatFacts from "./hooks/useCatFacts";
 
 interface ChangeOwedProps {
   change: Record<string, number>;
+  submitCount: number;
 }
 
-const ChangeOwed = ({change}: ChangeOwedProps) => {
-  const [shouldFetchFact, setShouldFetchFact] = useState(false);
+const ChangeOwed = ({change, submitCount}: ChangeOwedProps) => {
   const isChangeDue = Object.values(change).some((count) => count > 0);
   const sorteddArray = [...Object.entries(change)]
     .filter(([_, count]) => count > 0)
     .reverse();
 
-  useEffect(() => {
-    if (!isChangeDue) {
-      setShouldFetchFact((prev) => !prev);
-    }
-  }, [change, isChangeDue]);
-
-  const {fact, isLoading} = useCatFacts(shouldFetchFact);
+  const {fact, isLoading} = useCatFacts(submitCount);
 
   return (
     <div className="box">
@@ -28,7 +22,7 @@ const ChangeOwed = ({change}: ChangeOwedProps) => {
           <h4 className="box__subheading">Here is a cat fact for you:</h4>
           <div className="box__content">
             {isLoading ? (
-              <div className="spinner"></div>
+              <div data-testid="spinner" className="spinner"></div>
             ) : (
               <p className="box__citation">{fact}</p>
             )}

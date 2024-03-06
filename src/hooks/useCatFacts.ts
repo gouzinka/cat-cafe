@@ -14,13 +14,11 @@ interface UseCatFactsResult {
   isLoading: boolean;
 }
 
-const useCatFacts = (shouldFetchFact: boolean): UseCatFactsResult => {
+const useCatFacts = (submitCount: number): UseCatFactsResult => {
   const [fact, setFact] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!shouldFetchFact) return;
-
     const fetchData = async () => {
       setIsLoading(true);
 
@@ -50,7 +48,7 @@ const useCatFacts = (shouldFetchFact: boolean): UseCatFactsResult => {
     };
 
     fetchData();
-  }, [shouldFetchFact]);
+  }, [submitCount]);
 
   return {fact, isLoading};
 };

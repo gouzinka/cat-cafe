@@ -83,8 +83,10 @@ button#calculate {
 /*
     Error message
 */
-.spi .error-message {
+.error-message {
   color: rgb(177, 37, 37);
+  padding: 3px 0 8px 0;
+  text-align: left;
 }
 
 /*

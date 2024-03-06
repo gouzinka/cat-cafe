@@ -13,13 +13,23 @@ const MewlaConverter = () => {
     initialErrors
   );
   const [change, setChange] = useState({});
+  const [submitCount, setSubmitCount] = useState(0);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const calculateChange = useCallback(
     (event) => {
       event.preventDefault();
-      if (validateForm()) {
+      const isFormValid = validateForm();
+      setIsFormValid(isFormValid);
+
+      if (isFormValid) {
         const amountChargedNum = Number(formData.amountCharged);
         const amountTenderedNum = Number(formData.amountTendered);
+        if (formData.amountCharged === formData.amountTendered) {
+          // My aim is to re-fetch the fact even when data don't change but condition is met
+          // I'm using simple count, but could be any Event key, such a Timestamp
+          setSubmitCount((prevCount) => prevCount + 1);
+        }
         setChange(
           calculateChangeDistribution(amountChargedNum, amountTenderedNum)
         );
@@ -67,8 +77,8 @@ const MewlaConverter = () => {
       </form>
 
       <div id="results">
-        {change && Object.keys(change).length > 0 && (
-          <ChangeOwed change={change} />
+        {change && isFormValid && Object.keys(change).length > 0 && (
+          <ChangeOwed change={change} submitCount={submitCount} />
         )}
       </div>
     </div>

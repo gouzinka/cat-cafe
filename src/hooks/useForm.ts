@@ -19,16 +19,32 @@ const useForm = (initialState, initialErrors, debounceMs = 200) => {
     [debounceMs]
   );
 
-  const validateForm = useCallback(() => {
+  const validateForm = useCallback((): boolean => {
     let isValid = true;
-    const newErrors = Object.keys(formData).reduce((acc, key) => {
+
+    let newErrors = Object.keys(formData).reduce((acc, key) => {
       const error = validateField(formData[key]);
       acc[key] = error;
       if (error) isValid = false;
       return acc;
     }, {});
 
+    // Perform cross-field validation (only if individual fields have no errors)
+    if (isValid) {
+      const amountChargedNum = Number(formData.amountCharged);
+      const amountTenderedNum = Number(formData.amountTendered);
+
+      if (amountTenderedNum < amountChargedNum) {
+        isValid = false;
+        newErrors = {
+          ...newErrors,
+          form: "The amount paid must be equal to or greater than the amount charged."
+        };
+      }
+    }
+
     setErrors(newErrors);
+
     return isValid;
   }, [formData]);
 

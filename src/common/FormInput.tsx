@@ -28,7 +28,6 @@ const FormInput = ({
         id={id}
         name={name}
         type="number"
-        placeholder={placeholder}
         value={value}
         onChange={onChange}
         aria-required="true"
