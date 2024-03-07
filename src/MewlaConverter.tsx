@@ -24,8 +24,7 @@ const MewlaConverter = () => {
     [formData.amountCharged, formData.amountTendered]
   );
 
-  const calculateChange = useCallback(
-    (event) => {
+  const calculateChange = useCallback((event) => {
       event.preventDefault();
       const isFormValid = validateForm();
 
@@ -56,7 +55,6 @@ const MewlaConverter = () => {
             id="amountCharged"
             name="amountCharged"
             value={formData.amountCharged}
-            placeholder="We need"
             label="We need"
             errorMessage={errors.amountCharged}
             onChange={handleInputChange}
@@ -68,7 +66,6 @@ const MewlaConverter = () => {
             id="amountTendered"
             name="amountTendered"
             value={formData.amountTendered}
-            placeholder="You pay"
             label="You pay"
             errorMessage={errors.amountTendered}
             onChange={handleInputChange}

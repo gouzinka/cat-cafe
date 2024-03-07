@@ -70,4 +70,21 @@ describe("hooks/useForm", () => {
 
     expect(result.current.errors.testField).toBe("Field is required");
   });
+
+  it("clears form-wide errors on input change", async () => {
+    const {result} = renderHook(() =>
+      useForm({amountCharged: "", amountTendered: ""}, {form: "Error message"})
+    );
+
+    act(() => {
+      result.current.handleInputChange({
+        target: {name: "amountCharged", value: "100"}
+      });
+
+      // Fast-forward to skip debounce
+      jest.advanceTimersByTime(200);
+    });
+
+    await waitFor(() => expect(result.current.errors.form).toBe(""));
+  });
 });
