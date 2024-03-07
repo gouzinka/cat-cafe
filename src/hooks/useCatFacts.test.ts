@@ -7,6 +7,11 @@ fetchMock.enableMocks();
 describe("hooks/useCatFacts", () => {
   beforeEach(() => {
     fetchMock.resetMocks();
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   it("should initially set isLoading to true and then to false after fetching", async () => {
@@ -58,6 +63,51 @@ describe("hooks/useCatFacts", () => {
 
     await waitFor(() =>
       expect(result.current.fact).toBe("Cats sleep 70% of their lives.")
+    );
+  });
+
+  it("should retry fetching data if the API response contains an error", async () => {
+    fetchMock.mockResponseOnce(JSON.stringify({error: "Server overload"}));
+    fetchMock.mockResponseOnce(
+      JSON.stringify({message: "Cats have nine lives"})
+    );
+
+    // Allow for 2 retries
+    const {result} = renderHook(() => useCatFacts(0, 2));
+
+    jest.runAllTimers();
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false), {
+      timeout: 5000
+    });
+
+    expect(result.current.fact).toBe("Cats have nine lives");
+
+    // The fetch should have been called twice: once for initial fetch and once for retry
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("should fallback to the default fact after exceeding max retries", async () => {
+    const consoleSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    fetchMock.mockResponse(
+      JSON.stringify({error: "Server temporarily unavailable"})
+    );
+
+    // Allow for 1 retry
+    const {result} = renderHook(() => useCatFacts(0, 1));
+
+    jest.runAllTimers();
+
+    await waitFor(
+      () => {
+        expect(result.current.isLoading).toBe(false);
+        expect(result.current.fact).toBe(
+          "A group of cats is called a clowder."
+        );
+      },
+      {timeout: 5000}
     );
   });
 });

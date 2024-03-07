@@ -21,41 +21,56 @@ interface UseCatFactsResult {
     Since the API response is not exactly critical :) I used a fallback fact (ideally multiple)
     Also any error thrown doesn't affect application run, fails silently (I would send a log to a Sentry for example)
 */
-const useCatFacts = (submitCount: number): UseCatFactsResult => {
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const useCatFacts = (
+  submitCount: number,
+  maxRetries: number = 1
+): UseCatFactsResult => {
   const [fact, setFact] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
+      let attempt = 0;
 
-      try {
-        const response = await fetchWithTimeout(API_URL);
+      while (attempt <= maxRetries) {
+        try {
+          const response = await fetchWithTimeout(API_URL);
 
-        if (!response.ok) {
+          if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+
+          const {message, error}: CatFactApiResponse = await response.json();
+
+          if (error) {
+            if (attempt < maxRetries) {
+              attempt++;
+              // Exponential back-off, 1s, 2s, etc.
+              await delay(attempt * 1000);
+              continue;
+            } else {
+              throw new Error(
+                `Received an error from API after ${attempt} retries: ${error}`
+              );
+            }
+          }
+
+          setFact(message || CAT_FACT_FALLBACK);
+          return;
+        } catch (error) {
+          console.error("Failed to fetch cat fact:", error);
           setFact(CAT_FACT_FALLBACK);
-          console.error("An error occurred while fetching the data.");
+          break;
+        } finally {
+          setIsLoading(false);
         }
-
-        const {message, error}: CatFactApiResponse = await response.json();
-
-        // If we don't receive message use fallback and fail silently
-        setFact(message || CAT_FACT_FALLBACK);
-
-        if (error) {
-          console.error("Received an error from API:", error);
-        }
-      } catch (error) {
-        // Non-critical approach w/ fallback
-        setFact(CAT_FACT_FALLBACK);
-        console.error("Failed to fetch cat fact:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [submitCount]);
+  }, [submitCount, maxRetries]);
 
   return {fact, isLoading};
 };
