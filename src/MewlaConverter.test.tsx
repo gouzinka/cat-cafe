@@ -2,15 +2,15 @@ import React from "react";
 import "@testing-library/jest-dom";
 import {render, screen, waitFor} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import MewlaConverter from "./index";
-import useForm from "../hooks/useForm";
-import useCatFacts from "../hooks/useCatFacts";
+import MewlaConverter from "./MewlaConverter";
+import useForm from "./hooks/useForm";
+import useCatFacts from "./hooks/useCatFacts";
 
-jest.mock("../hooks/useForm", () => ({
+jest.mock("./hooks/useForm", () => ({
   __esModule: true,
   default: jest.fn()
 }));
-jest.mock("../hooks/useCatFacts", () => ({
+jest.mock("./hooks/useCatFacts", () => ({
   __esModule: true,
   default: jest.fn()
 }));

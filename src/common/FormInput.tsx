@@ -5,7 +5,6 @@ interface FormInputProps {
   id: string;
   name: string;
   value: string;
-  placeholder: string;
   label: string;
   errorMessage: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -15,7 +14,6 @@ const FormInput = ({
   id,
   name,
   value,
-  placeholder,
   label,
   errorMessage,
   onChange

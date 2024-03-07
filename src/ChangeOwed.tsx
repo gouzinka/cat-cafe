@@ -18,20 +18,7 @@ const ChangeOwed = ({change, submitCount}: ChangeOwedProps) => {
 
   return (
     <div className="box">
-      {!isChangeDue && (
-        <div>
-          <h2 className="box__heading">You paid the exact amount!</h2>
-          <h4 className="box__subheading">Here is a cat fact for you:</h4>
-          <div className="box__content">
-            {isLoading ? (
-              <div data-testid="spinner" className="spinner"></div>
-            ) : (
-              <p className="box__citation">{fact}</p>
-            )}
-          </div>
-        </div>
-      )}
-      {isChangeDue && (
+      {isChangeDue ? (
         <div>
           <h2 className="box__heading">Customer change</h2>
           <ul className="box__content">
@@ -42,6 +29,18 @@ const ChangeOwed = ({change, submitCount}: ChangeOwedProps) => {
               </li>
             ))}
           </ul>
+        </div>
+      ) : (
+        <div>
+          <h2 className="box__heading">You paid the exact amount!</h2>
+          <h4 className="box__subheading">Here is a cat fact for you:</h4>
+          <div className="box__content">
+            {isLoading ? (
+              <div data-testid="spinner" className="spinner"></div>
+            ) : (
+              <p className="box__citation">{fact}</p>
+            )}
+          </div>
         </div>
       )}
     </div>

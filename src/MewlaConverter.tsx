@@ -1,9 +1,9 @@
 import React, {useCallback, useMemo, useState} from "react";
-import useForm from "../hooks/useForm";
-import ChangeOwed from "../ChangeOwed";
-import FormInput from "../common/FormInput";
-import ErrorMessage from "../common/ErrorMessage";
-import {calculateChangeDistribution} from "./changeDistributionUtils";
+import useForm from "./hooks/useForm";
+import ChangeOwed from "./ChangeOwed";
+import FormInput from "./common/FormInput";
+import ErrorMessage from "./common/ErrorMessage";
+import {calculateChangeDistribution} from "./utils/changeDistribution";
 
 const MewlaConverter = () => {
   const initialState = {amountCharged: "", amountTendered: ""};
@@ -15,12 +15,17 @@ const MewlaConverter = () => {
   const [change, setChange] = useState({});
   const [submitCount, setSubmitCount] = useState(0);
 
-  const calculatedChange = useMemo(() => calculateChangeDistribution(
-    Number(formData.amountCharged), 
-    Number(formData.amountTendered)
-  ), [formData.amountCharged, formData.amountTendered]);
+  const calculatedChange = useMemo(
+    () =>
+      calculateChangeDistribution(
+        Number(formData.amountCharged),
+        Number(formData.amountTendered)
+      ),
+    [formData.amountCharged, formData.amountTendered]
+  );
 
-  const calculateChange = useCallback((event) => {
+  const calculateChange = useCallback(
+    (event) => {
       event.preventDefault();
       const isFormValid = validateForm();
 
@@ -33,7 +38,7 @@ const MewlaConverter = () => {
 
         setChange(calculatedChange);
       } else {
-        setChange({})
+        setChange({});
       }
     },
     [formData, validateForm, calculatedChange]

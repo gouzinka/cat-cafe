@@ -1,6 +1,6 @@
-import {validateField} from "./validateFieldUtils";
+import {validateField} from "./validateField";
 
-describe("validateField", () => {
+describe("utils/validateField", () => {
   const maxAllowedAmount = 999;
 
   test('returns "Field is required" for empty value', () => {

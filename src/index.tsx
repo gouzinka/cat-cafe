@@ -5,7 +5,7 @@ import "./reset.css";
 import "./styles.css";
 import Header from "./Header";
 import Tagline from "./Tagline";
-import MewlaConverter from "./mewlaConverter";
+import MewlaConverter from "./MewlaConverter";
 
 function App() {
   return (

@@ -1,6 +1,6 @@
-import {calculateChangeDistribution} from "./changeDistributionUtils";
+import {calculateChangeDistribution} from "./changeDistribution";
 
-describe("calculateChangeDistribution", () => {
+describe("utils/calculateChangeDistribution", () => {
   test("correctly calculates effective distribution", () => {
     const charged = 835;
     const tendered = 1000;

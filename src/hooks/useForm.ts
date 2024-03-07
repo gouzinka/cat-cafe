@@ -1,6 +1,6 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { debounce } from 'lodash';
-import { validateField } from '../mewlaConverter/validateFieldUtils';
+import {useState, useCallback, useRef, useEffect} from "react";
+import {debounce} from "lodash";
+import {validateField} from "../utils/validateField";
 
 /*
     Handle validations and input change within our form
@@ -13,20 +13,25 @@ const useForm = (initialState, initialErrors, debounceMs = 200) => {
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState(initialErrors);
 
-  const debouncedValidate = useRef(debounce((name, value) => {
-    const error = validateField(value);
-    setErrors((currentErrors) => ({ ...currentErrors, [name]: error }));
-  }, debounceMs)).current;
+  const debouncedValidate = useRef(
+    debounce((name, value) => {
+      const error = validateField(value);
+      setErrors((currentErrors) => ({...currentErrors, [name]: error}));
+    }, debounceMs)
+  ).current;
 
   useEffect(() => {
     return () => debouncedValidate.cancel();
   }, [debouncedValidate]);
 
-  const handleInputChange = useCallback((event) => {
-    const { name, value } = event.target;
-    setFormData((currentFormData) => ({ ...currentFormData, [name]: value }));
-    debouncedValidate(name, value);
-  }, [debouncedValidate]);
+  const handleInputChange = useCallback(
+    (event) => {
+      const {name, value} = event.target;
+      setFormData((currentFormData) => ({...currentFormData, [name]: value}));
+      debouncedValidate(name, value);
+    },
+    [debouncedValidate]
+  );
 
   const validateForm = useCallback(() => {
     let isValid = true;
@@ -45,7 +50,7 @@ const useForm = (initialState, initialErrors, debounceMs = 200) => {
         isValid = false;
         newErrors = {
           ...newErrors,
-          form: "The amount paid must be equal to or greater than the amount charged.",
+          form: "The amount paid must be equal to or greater than the amount charged."
         };
       }
     }
@@ -54,7 +59,7 @@ const useForm = (initialState, initialErrors, debounceMs = 200) => {
     return isValid;
   }, [formData]);
 
-  return { formData, handleInputChange, errors, validateForm };
+  return {formData, handleInputChange, errors, validateForm};
 };
 
 export default useForm;
