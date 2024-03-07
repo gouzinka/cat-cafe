@@ -10,7 +10,8 @@ export const calculateChangeDistribution = (
 ): Record<number, number> => {
   // Since I have a validation in place in my form component, this is a bit redundant defensive validation
   if (amountCharged < 0 || amountTendered < 0) {
-    throw new Error("Amounts cannot be negative");
+    console.error("Amount cannot be negative");
+    return {};
   }
 
   let changeDue = amountTendered - amountCharged;

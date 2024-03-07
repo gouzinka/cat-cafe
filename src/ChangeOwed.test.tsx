@@ -16,8 +16,8 @@ describe("ChangeOwed", () => {
     });
 
     const change = {100: 0, 33: 0, 21: 0, 7: 0, 3: 0, 1: 0};
-    const submitCount = 1;
-    render(<ChangeOwed change={change} submitCount={submitCount} />);
+    const fetchTrigger = false;
+    render(<ChangeOwed change={change} fetchTrigger={fetchTrigger} />);
 
     expect(screen.getByText("You paid the exact amount!")).toBeInTheDocument();
     expect(screen.getByText("Cats are great!")).toBeInTheDocument();
@@ -27,8 +27,8 @@ describe("ChangeOwed", () => {
     (useCatFacts as jest.Mock).mockReturnValue({fact: null, isLoading: true});
 
     const change = {100: 0, 33: 0, 21: 0, 7: 0, 3: 0, 1: 0};
-    const submitCount = 1;
-    render(<ChangeOwed change={change} submitCount={submitCount} />);
+    const fetchTrigger = false;
+    render(<ChangeOwed change={change} fetchTrigger={fetchTrigger} />);
 
     expect(screen.getByTestId("spinner")).toBeInTheDocument();
   });

@@ -3,10 +3,10 @@ import useCatFacts from "./hooks/useCatFacts";
 
 interface ChangeOwedProps {
   change: Record<string, number>;
-  submitCount: number;
+  fetchTrigger: boolean;
 }
 
-const ChangeOwed = ({change, submitCount}: ChangeOwedProps) => {
+const ChangeOwed = ({change, fetchTrigger}: ChangeOwedProps) => {
   const isChangeDue = Object.values(change).some((count) => count > 0);
   // We want to display only used denominations
   // Display from the biggest - since we use denominations as a number for a key, ES added automatic sorting in ascending order
@@ -14,7 +14,7 @@ const ChangeOwed = ({change, submitCount}: ChangeOwedProps) => {
     .filter(([_, count]) => count > 0)
     .reverse();
 
-  const {fact, isLoading} = useCatFacts(submitCount);
+  const {fact, isLoading} = useCatFacts(fetchTrigger);
 
   return (
     <div className="box">

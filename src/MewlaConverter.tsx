@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from "react";
+import React, {useCallback, useRef, useState} from "react";
 import useForm from "./hooks/useForm";
 import ChangeOwed from "./ChangeOwed";
 import FormInput from "./common/FormInput";
@@ -13,34 +13,37 @@ const MewlaConverter = () => {
     initialErrors
   );
   const [change, setChange] = useState({});
-  const [submitCount, setSubmitCount] = useState(0);
+  const [fetchTrigger, setFetchTrigger] = useState(false);
+  const calculatedChange = useRef({charged: null, tendered: null, result: {}});
 
-  const calculatedChange = useMemo(
-    () =>
-      calculateChangeDistribution(
-        Number(formData.amountCharged),
-        Number(formData.amountTendered)
-      ),
-    [formData.amountCharged, formData.amountTendered]
-  );
-
-  const calculateChange = useCallback((event) => {
+  const calculateChange = useCallback(
+    (event) => {
       event.preventDefault();
       const isFormValid = validateForm();
 
       if (isFormValid) {
-        if (formData.amountCharged === formData.amountTendered) {
-          // Re-fetch the fact even when amounts don't change and condition is met
-          // (I'm using simple count, but could be any Event key, such as Timestamp)
-          setSubmitCount((prevCount) => prevCount + 1);
+        const charged = Number(formData.amountCharged);
+        const tendered = Number(formData.amountTendered);
+
+        // Calculate change and memoize result
+        if (
+          charged === calculatedChange.current.charged &&
+          tendered === calculatedChange.current.tendered
+        ) {
+          setChange(calculatedChange.current.result);
+        } else {
+          const newChange = calculateChangeDistribution(charged, tendered);
+          setChange(newChange);
+          calculatedChange.current = {charged, tendered, result: newChange};
         }
 
-        setChange(calculatedChange);
+        // Re-fetch the fact even when amounts don't change and condition is met
+        setFetchTrigger((t) => !t);
       } else {
         setChange({});
       }
     },
-    [formData, validateForm, calculatedChange]
+    [formData.amountCharged, formData.amountTendered, validateForm]
   );
 
   return (
@@ -81,7 +84,7 @@ const MewlaConverter = () => {
 
       <div id="results">
         {change && Object.keys(change).length > 0 && (
-          <ChangeOwed change={change} submitCount={submitCount} />
+          <ChangeOwed change={change} fetchTrigger={fetchTrigger} />
         )}
       </div>
     </div>

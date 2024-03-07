@@ -24,7 +24,8 @@ const useForm = (initialState, initialErrors, debounceMs = 200) => {
     return () => debouncedValidate.cancel();
   }, [debouncedValidate]);
 
-  const handleInputChange = useCallback((event) => {
+  const handleInputChange = useCallback(
+    (event) => {
       const {name, value} = event.target;
       setFormData((currentFormData) => ({...currentFormData, [name]: value}));
       debouncedValidate(name, value);

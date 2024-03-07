@@ -17,7 +17,7 @@ describe("hooks/useCatFacts", () => {
   it("should initially set isLoading to true and then to false after fetching", async () => {
     fetchMock.mockResponseOnce(JSON.stringify({message: "Cats are great!"}));
 
-    const {result} = renderHook(() => useCatFacts(0));
+    const {result} = renderHook(() => useCatFacts(false));
     expect(result.current.isLoading).toBe(true);
 
     await waitFor(() => {
@@ -32,7 +32,7 @@ describe("hooks/useCatFacts", () => {
       .mockImplementation(() => {});
 
     fetchMock.mockReject(new Error("API is down"));
-    const {result} = renderHook(() => useCatFacts(1));
+    const {result} = renderHook(() => useCatFacts(true));
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -42,7 +42,7 @@ describe("hooks/useCatFacts", () => {
     consoleSpy.mockRestore();
   });
 
-  it("should fetch a new fact when submitCount changes", async () => {
+  it("should fetch a new fact when fetchTrigger changes", async () => {
     fetchMock
       .mockResponseOnce(JSON.stringify({message: "Cats are great!"}))
       .mockResponseOnce(
@@ -50,16 +50,16 @@ describe("hooks/useCatFacts", () => {
       );
 
     const {result, rerender} = renderHook(
-      ({submitCount}) => useCatFacts(submitCount),
+      ({fetchTrigger}) => useCatFacts(fetchTrigger),
       {
-        initialProps: {submitCount: 0}
+        initialProps: {fetchTrigger: false}
       }
     );
 
     await waitFor(() => expect(result.current.fact).toBe("Cats are great!"));
 
     // Trigger another fetch
-    rerender({submitCount: 1});
+    rerender({fetchTrigger: true});
 
     await waitFor(() =>
       expect(result.current.fact).toBe("Cats sleep 70% of their lives.")
@@ -73,7 +73,7 @@ describe("hooks/useCatFacts", () => {
     );
 
     // Allow for 2 retries
-    const {result} = renderHook(() => useCatFacts(0, 2));
+    const {result} = renderHook(() => useCatFacts(false, 2));
 
     jest.runAllTimers();
 
@@ -88,15 +88,14 @@ describe("hooks/useCatFacts", () => {
   });
 
   it("should fallback to the default fact after exceeding max retries", async () => {
-    const consoleSpy = jest
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
     fetchMock.mockResponse(
       JSON.stringify({error: "Server temporarily unavailable"})
     );
 
+    const consoleSpy = jest.spyOn(console, "error");
+
     // Allow for 1 retry
-    const {result} = renderHook(() => useCatFacts(0, 1));
+    const {result} = renderHook(() => useCatFacts(false, 1));
 
     jest.runAllTimers();
 
@@ -109,5 +108,12 @@ describe("hooks/useCatFacts", () => {
       },
       {timeout: 5000}
     );
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "Failed to fetch cat fact:",
+      expect.any(Error)
+    );
+
+    consoleSpy.mockRestore();
   });
 });

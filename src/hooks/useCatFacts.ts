@@ -24,7 +24,7 @@ interface UseCatFactsResult {
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const useCatFacts = (
-  submitCount: number,
+  fetchTrigger: boolean,
   maxRetries: number = 1
 ): UseCatFactsResult => {
   const [fact, setFact] = useState<string | null>(null);
@@ -70,7 +70,7 @@ const useCatFacts = (
     };
 
     fetchData();
-  }, [submitCount, maxRetries]);
+  }, [fetchTrigger]);
 
   return {fact, isLoading};
 };

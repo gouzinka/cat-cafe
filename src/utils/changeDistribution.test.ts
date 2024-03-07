@@ -41,12 +41,19 @@ describe("utils/calculateChangeDistribution", () => {
     expect(distribution).toEqual(expectedDistribution);
   });
 
-  test("throws error for negative amounts", () => {
+  test("returns empty object and logs error for negative amounts", () => {
     const charged = -100;
     const tendered = 1000;
+    const consoleSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
 
-    expect(() => calculateChangeDistribution(charged, tendered)).toThrow(
-      "Amounts cannot be negative"
-    );
+    const result = calculateChangeDistribution(charged, tendered);
+
+    expect(result).toEqual({});
+
+    expect(consoleSpy).toHaveBeenCalledWith("Amount cannot be negative");
+
+    consoleSpy.mockRestore();
   });
 });
