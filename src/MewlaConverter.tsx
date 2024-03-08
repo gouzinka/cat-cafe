@@ -36,9 +36,11 @@ const MewlaConverter = () => {
           setChange(newChange);
           calculatedChange.current = {charged, tendered, result: newChange};
         }
-
-        // Re-fetch the fact even when amounts don't change and condition is met
-        setFetchTrigger((t) => !t);
+        
+        if (charged === tendered) {
+          // Re-fetch the fact even when amounts don't change and condition is met
+          setFetchTrigger((t) => !t);
+        }
       } else {
         setChange({});
       }
