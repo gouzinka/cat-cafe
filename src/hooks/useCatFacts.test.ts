@@ -75,7 +75,7 @@ describe("hooks/useCatFacts", () => {
     // Allow for 2 retries
     const {result} = renderHook(() => useCatFacts(false, 2));
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await waitFor(() => expect(result.current.isLoading).toBe(false), {
       timeout: 5000
@@ -97,7 +97,7 @@ describe("hooks/useCatFacts", () => {
     // Allow for 1 retry
     const {result} = renderHook(() => useCatFacts(false, 1));
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await waitFor(
       () => {
